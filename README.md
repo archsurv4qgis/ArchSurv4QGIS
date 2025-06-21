@@ -5,6 +5,7 @@ It is designed as an adjustable ".model3" algorithm pipeline.
 ------------------------------------------------------------------
 
 What is ArchSurv4QGIS?
+
 AS4QGIS works on the basis of point data exported as delimited text from a surveying device. 
 
 ArchSurv4QGIS processes 10-character pointID-strings: e. g. '0001A03001'
@@ -46,6 +47,7 @@ AS4QGIS is free to use and fully customizable.
 
 
 Versions
+
 Currently, three variations of the same algorithmic pipeline are available:
 
 
@@ -60,12 +62,12 @@ Currently, three variations of the same algorithmic pipeline are available:
 ----------------------------------------------------------------------
 
 In-field
-Survey Device Requirements
-Spatial data from any surveying device (e. g. a total station, a GNSS receiver, ...) can serve as a basis for further processing via AS4QGIS. The only requirement for the device is the ability to output the acquired point data as 'Delimited Text'.
-ArchSurv-Code Guide
-AS4QGIS processes 10-digit pointID-strings according to the following scheme 'XXXXYZZ001', which must be entered into the point ID field of the surveying device.
 
-----------------------------------------------------------------------
+Survey Device Requirements:
+Spatial data from any surveying device (e. g. a total station, a GNSS receiver, ...) can serve as a basis for further processing via AS4QGIS. The only requirement for the device is the ability to output the acquired point data as 'Delimited Text'.
+
+ArchSurv-Code Guide:
+AS4QGIS processes 10-digit pointID-strings according to the following scheme 'XXXXYZZ001', which must be entered into the point ID field of the surveying device.
 
 XXXX | 4 digit long feature number.
 It is possible to record up to 9999 features; e.g. '0001'.
@@ -92,7 +94,7 @@ section nails | '00' - section nail point
 
 ----------------------------------------------------------------------
 
-Point Properties
+Point Properties:
 While letters act as line containers for polyline and polygon measurements, sample, posthole, and finds point measurements can be assigned point properties using letters.
 
 sample
@@ -126,8 +128,10 @@ Example Codes
 
 ----------------------------------------------------------------------
 
-How to Correctly Collect Spatial Data
+How to Correctly Collect Spatial Data:
+
 The application of diverse measurement strategies during fieldwork leads to ideal mapping results in subsequent ArchSurv4QGIS post-processing. These are considered "best practices."
+
 - Different lines cannot be measured using the same ArchSurv string. (!!!)
 - Closed lines '03', i.e. polygons, should indicate the largest dimensions of the feature. This means that for a wall that spreads downwards, the lower edges of the wall should ideally be measured as closed polygons '03', while the upper edges should be measured as open polylines '02'.
 - Line measurements for finds '72', '73' and samples '52', '53' should also be supplemented with a point measurement '71' or '51' within the polyline or polygon measurement.
@@ -135,8 +139,11 @@ The application of diverse measurement strategies during fieldwork leads to idea
 - Plughole measurements '61' are performed using a centrally placed point. The diameter of the plughole is given by the 5th character [e.g., 0007'C'51001] of the ArchSurv character string. For surveying efficiency, it is recommended to group the plughole measurements according to their different diameters.
 - Excavation boundaries '92' and '93' are ideally measured under the layer ID '0000' or '9999' [e.g., 0000'C'51001]. 0000A93001]. The label field should contain the trench name.
 - Closed lines that should not be in the polygon.shp layer but in the polyline.shp layer can be measured under the "shape type" code '33'.
+
 In-office
+
 Type of Input Data
+
 ArchSurv4QGIS processes delimited Text imported into QGIS as point data with X, Y, and Z values ​​using the "Delimited Text" import function. The file format and the delimiter type of the exported file from the surveying device are insignificant. The exported file should simply be in a format generally readable by QGIS (e.g., .csv, .txt, .asc, etc.) and contain five values ​​structured as follows:
 
 "Point number/ID"; "x/easting"; "y/northing"; "z/elevation"; "Label"
@@ -144,12 +151,14 @@ ArchSurv4QGIS processes delimited Text imported into QGIS as point data with X, 
 ----------------------------------------------------------------------
 
 Import Input Data
+
 First, the desired text file should be imported into QGIS. Follow these steps:
 1 | Click the "Open Data Source Manager" icon. Select the "Delimited Text" option. Use the "[...]" icon to the right of the "File name" field to locate the text file you want to import.
 
 2 | Under File Format, select "Custom delimiters". Here you can set the "Delimiter" used in the text file. If the correct delimiter has been selected, the data should already be displayed as a table under "Sample Data."
 
 3 |Further settings can be made under "Record and Field Options." Mandatory: The "First record has field names" checkbox must not (!!!) be selected. If this box is not selected, the column names under "Sample Data" will be assigned the values ​​'field_1'; 'field_2'; 'field_3'; 'field_4'; 'field_5', in accordance with the algorithm. If the "Detect field types" checkbox is selected, the column types will be automatically assigned correctly. The following applies:
+
 'field_1': Column type "Text (string)" must contain the 'Point number/ID' values.
 'field_2': Column type "Decimal (Double)" must contain the 'x/easting' values;
 'field_3': Column type "Decimal (Double)" must contain the 'y/northing' values;
@@ -170,6 +179,7 @@ Under "Geometry CRS", select the coordinate reference system used to record the 
 ----------------------------------------------------------------------
 
 Start AS4QGIS 
+
 1 | Start AS4QGIS by double-clicking.
 2 | Select the text file you want to edit.
 3 | Click "Run."
@@ -182,6 +192,7 @@ Also note: All point measurements with IDs that do not begin with four digits, a
 
 
 Output Shapefiles
+
 Starting from the input file, AS4QGIS generates four shapefiles based on the 'shape type' defined in-field on the surveying device. These include the following shape types:
 vertices.shp | All measurement points that do not serve any further function than being vertex points of polylines or polygons.
 pointdata.shp | '00', '01', '51', '71', '81', '91'
@@ -193,6 +204,7 @@ polygons.shp | '03', '53', '61', '73', '93'
 
 
 vertices.shp
+
 point-ID | the original ID of the point measurement as entered on the surveying device.
 x | the x/easting value of the point measurement.
 y | the y/northing value of the point measurement.
@@ -209,6 +221,7 @@ originfile | the file name of the processed 'delimited text'.
 ----------------------------------------------------------------------
 
 pointdata.shp
+
 ID | the identifier of the feature.
 designatio | the 'label/code' of the point measurement as entered on the surveying device.
 shptype_n | the shape type as a string corresponding to the shape type integer.
@@ -233,6 +246,7 @@ CAD-ID | A composite identifier consisting of the 'IDstring' and the 'designatio
 ----------------------------------------------------------------------
 
 polylines.shp
+
 ID | the identifier of the feature.
 designatio | the 'label/code' of the point measurement as entered on the surveying device.
 shptype | the shape type as an integer.
@@ -247,6 +261,7 @@ CAD-ID | A composite identifier consisting of the 'IDstring' and the 'designatio
 ----------------------------------------------------------------------
 
 polygons.shp
+
 ID | the identifier of the feature.
 designatio | the 'label/code' of the point measurement as entered on the surveying device.
 shptype | the shape type as an integer.
@@ -261,6 +276,7 @@ CAD-ID | A composite identifier consisting of the 'IDstring' and the 'designatio
 ----------------------------------------------------------------------
 
 Temporal Controller
+
 The Chronos and Chimaira variations of the algorithm generate the pseudo-data fields “maxHtemp” and “minHtemp” based on the attribute fields “maxH” and “minH”. In other words, the minimum and maximum elevation values of a feature measurement are translated into a date.
 
 The following rules apply to this pseudo-date conversion:
@@ -317,6 +333,7 @@ All features will be displayed that have a pseudo time range (i.e. an elevation 
 ----------------------------------------------------------------------
 
 Qgis2threejs as a Useful Plugin
+
 A visual confirmation that the algorithm-generated outputs are truly three-dimensional datasets can be obtained either through a .dxf export or by using the Qgis2threejs plugin.
 
 The Qgis2threejs extension can be found and installed from the menu bar under "Plugins" > "Manage and Install Plugins...", then by searching "qgis2threejs" in the search field.
@@ -330,6 +347,7 @@ You will then see an interactive, rotatable 3D view of your measurements.
 
 
 CAD-Export
+
 AS4QGIS output files can be converted to a CAD format using the QGIS internal function "Project" - "Import/Export" - "Export Project to DXF...".
 First, select a save location. Under "Output Layer Attribute" (you must scroll to the right to see this), select the desired attribute according to which the layers should be created in the DXF. Depending on your requirements, it is recommended to use either "ID", "IDstring", or "CAD-ID" as the layer attribute for the shapefiles "polylines.shp" and "polygons.shp". To export the point measurements "pointdata.shp" grouped by their properties, it is recommended to export using the attribute "shptype_n".
 The "Symbology mode" should be 'Symbol Layer Symbology'.
